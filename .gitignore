@@ -1,0 +1,9 @@
+# .gitignore
+# Binarios y carpetas de construcción
+build/
+.cache/
+
+# Archivos de editores (VS Code, CLion, etc.)
+.vscode/
+.idea/
+*.user
