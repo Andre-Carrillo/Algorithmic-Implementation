@@ -1,6 +1,8 @@
 #include <iostream>
+#include <string>
 
-int main() {
-    std::cout << "¡Repositorio de C++ inicializado correctamente!" << std::endl;
+int main(int argc, char* argv[]) {
+    std::cout << argc;
+    std::cout << argv[3];
     return 0;
 }
