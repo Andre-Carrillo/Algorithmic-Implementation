@@ -7,6 +7,7 @@
 
 static std::mt19937 motor(42);
 
+
 //Parametros ocultos
 
 //Genetic algorithm
@@ -35,14 +36,14 @@ meta::Resultado algo::PM_Genetic_Algorithm(prob::Optimization_Problem problema_o
         poblacion.push_back(i_individuo);
     }
 
-    individuo mejor{};
+    individuo mejor=poblacion[0];
 
     //para la selección
     std::uniform_int_distribution<int> indice_random(0, pop_size-1);
 
     auto seleccion = [&poblacion, &indice_random, &problema_optimizacion]() -> individuo{
         std::vector<individuo> participantes;
-        individuo mejor{};
+        individuo mejor = poblacion[0];
         mejor.score = problema_optimizacion.evaluar(mejor.xy[0], mejor.xy[1]);
         for(int i=0; i<tournament_size; i++){
             participantes.push_back(poblacion[indice_random(motor)]);
@@ -53,11 +54,12 @@ meta::Resultado algo::PM_Genetic_Algorithm(prob::Optimization_Problem problema_o
         return mejor;
     };
     //mutate
-    auto mutate = [mutation_rate](individuo& ind)->individuo{
-        std::uniform_real_distribution<double> d(0,0.5);
-        if(d(motor)*2<mutation_rate){
-        ind.xy = {ind.xy[0]+d(motor), ind.xy[1]+d(motor)};
+    auto mutate = [mutation_rate](individuo& ind) -> individuo {
+        std::uniform_real_distribution<double> d(0, 0.5);
+        if ((d(motor) * 2) < mutation_rate) {
+            ind.xy = {ind.xy[0] + d(motor), ind.xy[1] + d(motor)};
         }
+        return ind; 
     };
 
     std::vector<meta::PuntoHistorial> Historial{};
@@ -85,10 +87,16 @@ meta::Resultado algo::PM_Genetic_Algorithm(prob::Optimization_Problem problema_o
 
         auto iter_end = std::chrono::high_resolution_clock::now();
         auto duracion_us = std::chrono::duration_cast<std::chrono::microseconds>(iter_end - iter_start);
-        meta::PuntoHistorial punto_i = {duracion_us.count()/1000, i, mejor.score};
+        double tiempo_ms = static_cast<double>(duracion_us.count()) / 1000.0;
+        meta::PuntoHistorial punto_i = {tiempo_ms, i, mejor.score};
         Historial.push_back(punto_i);
     }
     meta::Resultado res;
     res.Historial = Historial;
     return res;
 }
+
+
+std::vector<std::function<meta::Resultado(prob::Optimization_Problem, int, double, int)>> algo::lista_algoritmos = {
+    algo::PM_Genetic_Algorithm
+};

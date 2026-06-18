@@ -1,5 +1,8 @@
 #include "funciones.hpp"
 #include <cmath>
+#include <functional>
+
+
 
 prob::Optimization_Problem iniciarEsfera(){
     prob::Optimization_Problem esfera;
@@ -22,3 +25,8 @@ prob::Optimization_Problem iniciarHimmelblau(){
     };
     return HimmelBlau;
 }
+
+
+
+std::vector<prob::Optimization_Problem> prob::lista_problemas = { iniciarEsfera(),
+                                                    iniciarHimmelblau() };

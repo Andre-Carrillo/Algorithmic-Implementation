@@ -4,6 +4,8 @@
 #include <functional>
 
 namespace algo{
+
+    
     //meta::Resultado SS_Gradient_Ascent(const prob::Optimization_Problem problema_optimizacion);
     //meta::Resultado SS_Gradient_Ascent_Restarts(const prob::Optimization_Problem problema_optimizacion);
     //meta::Resultado SS_HillClimbing(const prob::Optimization_Problem problema_optimizacion,
@@ -29,4 +31,6 @@ namespace algo{
                                         int pop_size, 
                                         double mutation_rate,
                                         int max_generations);
+
+    extern std::vector<std::function<meta::Resultado(const prob::Optimization_Problem, int, double, int)>> lista_algoritmos;
 }

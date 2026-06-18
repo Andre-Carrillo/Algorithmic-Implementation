@@ -4,6 +4,11 @@
 
 namespace prob{
 
+    
+
+    
+
+
     struct Limit{
         double min;
         double max;
@@ -21,6 +26,7 @@ namespace prob{
         }
     };
 
+    extern std::vector<Optimization_Problem> lista_problemas;
     //Declaración de problemas de optimización
 
     Optimization_Problem iniciarEsfera();

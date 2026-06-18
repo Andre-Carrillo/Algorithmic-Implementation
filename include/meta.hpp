@@ -8,7 +8,7 @@ namespace meta{
     struct PuntoHistorial{
         double t;
         int iteracion;
-        float mejor_valor;
+        double mejor_valor;
     };
 
     // struct Metadatos{
