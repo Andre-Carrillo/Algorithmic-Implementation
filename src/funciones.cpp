@@ -26,7 +26,42 @@ prob::Optimization_Problem iniciarHimmelblau(){
     return HimmelBlau;
 }
 
+prob::Optimization_Problem iniciarBeale(){
+    prob::Optimization_Problem Beale;
+    Beale.name = "Problema de Beale";
+    Beale.limit_x = {-4.5,4.5};
+    Beale.limit_y = {-4.5,4.5};
+    Beale.funcion_costo = [](const std::vector<double>& v){
+        return (std::pow(1.5-v[0]*v[0]+v[1]*v[0], 2)+std::pow(2.25-v[0]+v[0]*v[1]*v[1], 2)+std::pow(2.625-v[0]+v[0]*v[1]*v[1]*v[1], 2));
+    };
+    return Beale;
+}
+
+prob::Optimization_Problem iniciarMatyas(){
+    prob::Optimization_Problem Matyas;
+    Matyas.name = "Problema de Matyas";
+    Matyas.limit_x = {-10,10};
+    Matyas.limit_y = {-10,10};
+    Matyas.funcion_costo = [](const std::vector<double>& v){
+        return (0.26*(v[0]*v[0]+v[1]*v[1]-0.48*v[0]*v[1]));
+    };
+    return Matyas;
+}
+
+prob::Optimization_Problem iniciarRosenbrock(){
+    prob::Optimization_Problem Rosenbrock;
+    Rosenbrock.name = "Problema de Rosenbrock";
+    Rosenbrock.limit_x = {-10,10};
+    Rosenbrock.limit_y = {-10,10};
+    Rosenbrock.funcion_costo = [](const std::vector<double>& v){
+        return (std::pow(10*(v[1]-v[0]*v[0]),2)+std::pow((1-v[0]),2));
+    };
+    return Rosenbrock;
+}
 
 
 std::vector<prob::Optimization_Problem> prob::lista_problemas = { iniciarEsfera(),
-                                                    iniciarHimmelblau() };
+                                                    iniciarHimmelblau(),
+                                                    iniciarBeale(),
+                                                    iniciarMatyas(),
+                                                    iniciarRosenbrock() };

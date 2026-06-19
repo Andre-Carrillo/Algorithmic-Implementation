@@ -29,6 +29,6 @@ namespace prob{
     extern std::vector<Optimization_Problem> lista_problemas;
     //Declaración de problemas de optimización
 
-    Optimization_Problem iniciarEsfera();
-    Optimization_Problem iniciarHimmelblau();
+    // Optimization_Problem iniciarEsfera();
+    // Optimization_Problem iniciarHimmelblau();
 }

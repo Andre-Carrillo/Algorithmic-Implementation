@@ -5,7 +5,7 @@
 #include <random>
 #include <chrono>
 
-static std::mt19937 motor(42);
+static std::mt19937 motor(40);
 
 
 //Parametros ocultos
