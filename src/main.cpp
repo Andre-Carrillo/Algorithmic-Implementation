@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
     std::cout<< "Problema finalizado" <<std::endl;
 
     for(int i = 0; i<resultado.Historial.size(); i++){
-        std::cout << "Tiempo: " << resultado.Historial[i].t << "|   Best_score: " << resultado.Historial[i].mejor_valor<<std::endl;
+        std::cout << "Tiempo: " << resultado.Historial[i].t << "|   Best_score: " << resultado.Historial[i].mejor_valor<<"|  Mejor posicion: "<< resultado.Historial[i].mejor_x<<", "<<resultado.Historial[i].mejor_y<<std::endl;
     }
 
     return 0;

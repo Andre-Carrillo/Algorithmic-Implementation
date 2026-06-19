@@ -9,6 +9,8 @@ namespace meta{
         double t;
         int iteracion;
         double mejor_valor;
+        double mejor_x;
+        double mejor_y;
     };
 
     // struct Metadatos{
