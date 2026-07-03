@@ -13,9 +13,10 @@ struct AlgContext {
   int max_generations;
 };
 
-// meta::Resultado SS_Gradient_Ascent(const prob::Optimization_Problem
-// problema_optimizacion); meta::Resultado SS_Gradient_Ascent_Restarts(const
-// prob::Optimization_Problem problema_optimizacion);
+// este es un comentario
+//  meta::Resultado SS_Gradient_Ascent(const prob::Optimization_Problem
+//  problema_optimizacion); meta::Resultado SS_Gradient_Ascent_Restarts(const
+//  prob::Optimization_Problem problema_optimizacion);
 meta::Resultado
 SS_HillClimbing(const prob::Optimization_Problem problema_optimizacion,
                 AlgContext contexto);
