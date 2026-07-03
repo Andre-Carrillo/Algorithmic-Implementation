@@ -8,8 +8,14 @@ int main(int argc, char *argv[]) {
   int algoritmo_id = std::stoi(argv[2]);
 
   std::cout << "Cargando Problema" << std::endl;
+  algo::AlgContext contexto;
+  contexto.max_generations = 300;
+  contexto.max_iter = 1000;
+  contexto.mutation_rate = 0.05;
+  contexto.pop_size = 300;
+  contexto.radio = 0.5;
   meta::Resultado resultado = algo::lista_algoritmos[algoritmo_id](
-      prob::lista_problemas[problema_id], 300, 0.05, 100);
+      prob::lista_problemas[problema_id], contexto);
   std::cout << "Problema finalizado" << std::endl;
   // hola este es un comentario de prueba
 

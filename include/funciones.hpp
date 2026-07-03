@@ -1,34 +1,27 @@
 #pragma once
-#include <string>
 #include <functional>
+#include <string>
 
-namespace prob{
+namespace prob {
 
-    
+struct Limit {
+  double min;
+  double max;
+};
 
-    
+struct Optimization_Problem {
+  std::string name;
+  Limit limit_x;
+  Limit limit_y;
 
+  std::function<double(const std::vector<double> &)> funcion_costo;
 
-    struct Limit{
-        double min;
-        double max;
-    };
+  double evaluar(double x, double y) const { return funcion_costo({x, y}); }
+};
 
-    struct Optimization_Problem{
-        std::string name;
-        Limit limit_x;
-        Limit limit_y;
+extern std::vector<Optimization_Problem> lista_problemas;
+// Declaración de problemas de optimización
 
-        std::function<double(const std::vector<double>&)> funcion_costo;
-
-        double evaluar (double x, double y) const {
-            return funcion_costo({x,y});
-        }
-    };
-
-    extern std::vector<Optimization_Problem> lista_problemas;
-    //Declaración de problemas de optimización
-
-    // Optimization_Problem iniciarEsfera();
-    // Optimization_Problem iniciarHimmelblau();
-}
+// Optimization_Problem iniciarEsfera();
+// Optimization_Problem iniciarHimmelblau();
+} // namespace prob
