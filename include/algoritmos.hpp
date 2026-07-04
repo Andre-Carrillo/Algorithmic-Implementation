@@ -2,6 +2,8 @@
 #include "funciones.hpp"
 #include "meta.hpp"
 #include <functional>
+#include <string>
+#include <vector>
 
 namespace algo {
 
@@ -17,6 +19,14 @@ struct AlgContext {
 //  meta::Resultado SS_Gradient_Ascent(const prob::Optimization_Problem
 //  problema_optimizacion); meta::Resultado SS_Gradient_Ascent_Restarts(const
 //  prob::Optimization_Problem problema_optimizacion);
+
+struct AlgoritmoOptimizacion {
+  std::string name;
+  std::vector<std::string> context_parameter_names;
+  std::function<meta::Resultado(const prob::Optimization_Problem, AlgContext)>
+      algoritmo;
+};
+
 meta::Resultado
 SS_HillClimbing(const prob::Optimization_Problem problema_optimizacion,
                 AlgContext contexto);
@@ -45,7 +55,8 @@ meta::Resultado
 PM_Genetic_Algorithm(const prob::Optimization_Problem problema_optimizacion,
                      AlgContext contexto);
 
-extern std::vector<std::function<meta::Resultado(
-    const prob::Optimization_Problem, AlgContext)>>
-    lista_algoritmos;
+// extern std::vector<std::function<meta::Resultado(
+//     const prob::Optimization_Problem, AlgContext)>>
+//     lista_algoritmos;
+extern std::vector<AlgoritmoOptimizacion> lista_algoritmos;
 } // namespace algo

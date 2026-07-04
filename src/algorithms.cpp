@@ -69,11 +69,11 @@ algo::PM_Genetic_Algorithm(prob::Optimization_Problem problema_optimizacion,
   };
 
   std::vector<meta::PuntoHistorial> Historial{};
+  auto iter_start = std::chrono::high_resolution_clock::now();
 
   for (int i = 0; i < max_generations; i++) {
     std::vector<individuo> new_pop = poblacion;
     mejor.score = problema_optimizacion.evaluar(mejor.xy[0], mejor.xy[1]);
-    auto iter_start = std::chrono::high_resolution_clock::now();
     for (individuo &ind : new_pop) {
       ind.score = problema_optimizacion.evaluar(ind.xy[0], ind.xy[1]);
       if (mejor.score > ind.score) {
@@ -106,6 +106,11 @@ algo::PM_Genetic_Algorithm(prob::Optimization_Problem problema_optimizacion,
   res.Historial = Historial;
   return res;
 }
+
+algo::AlgoritmoOptimizacion algoritmoGenetico = {
+    "Algoritmo Genetico",
+    {"pop_size", "mutation_rate", "max_generations"},
+    algo::PM_Genetic_Algorithm};
 
 meta::Resultado
 algo::SS_HillClimbing(const prob::Optimization_Problem problema_optimizacion,
@@ -146,13 +151,19 @@ algo::SS_HillClimbing(const prob::Optimization_Problem problema_optimizacion,
         tiempo_ms, i, problema_optimizacion.evaluar(pivot[0], pivot[1]),
         pivot[0], pivot[1]};
     Historial.push_back(punto_i);
+    radio *= 0.999;
   }
   meta::Resultado res;
   res.Historial = Historial;
   return res;
 }
 
-std::vector<std::function<meta::Resultado(prob::Optimization_Problem,
-                                          algo::AlgContext)>>
-    algo::lista_algoritmos = {algo::PM_Genetic_Algorithm,
-                              algo::SS_HillClimbing};
+algo::AlgoritmoOptimizacion algoritmoHillClimbing = {
+    "Algoritmo Hill Climbing", {"radio", "max_iter"}, algo::SS_HillClimbing};
+
+// std::vector<std::function<meta::Resultado(prob::Optimization_Problem,
+//                                           algo::AlgContext)>>
+//     algo::lista_algoritmos = {algo::PM_Genetic_Algorithm,
+//                               algo::SS_HillClimbing};
+std::vector<algo::AlgoritmoOptimizacion> algo::lista_algoritmos = {
+    algoritmoGenetico, algoritmoHillClimbing};
