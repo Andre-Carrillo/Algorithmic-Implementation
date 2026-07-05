@@ -2,6 +2,7 @@
 #include "funciones.hpp"
 #include "meta.hpp"
 #include <chrono>
+#include <cmath>
 #include <random>
 #include <vector>
 
@@ -161,9 +162,101 @@ algo::SS_HillClimbing(const prob::Optimization_Problem problema_optimizacion,
 algo::AlgoritmoOptimizacion algoritmoHillClimbing = {
     "Algoritmo Hill Climbing", {"radio", "max_iter"}, algo::SS_HillClimbing};
 
+meta::Resultado algo::SS_Simulated_Annealing(
+    const prob::Optimization_Problem problema_optimizacion,
+    AlgContext contexto) {
+  double r = contexto.tasa_reduccion;
+  double a = contexto.alpha;
+  double radio = contexto.radio;
+
+  int n_points = 100;
+  // Hallar el costo promedio \diff E
+  std::vector<std::vector<double>> lista_puntos;
+  std::uniform_real_distribution<double> x_range(
+      problema_optimizacion.limit_x.min, problema_optimizacion.limit_x.max);
+  std::uniform_real_distribution<double> y_range(
+      problema_optimizacion.limit_y.min, problema_optimizacion.limit_y.max);
+
+  for (int i = 0; i < n_points; i++) {
+    lista_puntos.push_back({x_range(motor), y_range(motor)});
+  }
+  int count = 0;
+  double sum = 0;
+
+  for (int i = 0; i < n_points; i++) {
+    for (int j = i; j < n_points; j++) {
+      if (problema_optimizacion.evaluar(lista_puntos[i][0],
+                                        lista_puntos[i][1]) >
+          problema_optimizacion.evaluar(lista_puntos[j][0],
+                                        lista_puntos[j][1])) {
+        sum += problema_optimizacion.evaluar(lista_puntos[i][0],
+                                             lista_puntos[i][1]) -
+               problema_optimizacion.evaluar(lista_puntos[j][0],
+                                             lista_puntos[j][1]);
+        count++;
+      }
+    }
+  }
+
+  double diff_E = sum / count;
+  double t = -diff_E / std::log(r);
+  // Algoritmo
+
+  std::vector<double> S = {x_range(motor), y_range(motor)};
+  std::vector<double> best = S;
+
+  std::vector<meta::PuntoHistorial> Historial{};
+
+  auto iter_start = std::chrono::high_resolution_clock::now();
+
+  int iter = 0;
+  while (t > 0.00000001 && iter < contexto.max_iter) {
+    std::uniform_real_distribution<double> x_range_sample(S[0] - radio,
+                                                          S[0] + radio);
+    std::uniform_real_distribution<double> y_range_sample(S[1] - radio,
+                                                          S[1] + radio);
+    std::vector<double> R = {x_range_sample(motor), y_range_sample(motor)};
+
+    std::uniform_real_distribution<double> zero_one(0, 1);
+    if (problema_optimizacion.evaluar(R[0], R[1]) <
+            problema_optimizacion.evaluar(S[0], S[1]) ||
+        zero_one(motor) < std::exp((problema_optimizacion.evaluar(S[0], S[1]) -
+                                    problema_optimizacion.evaluar(R[0], R[1])) /
+                                   (t + 1e-9))) {
+
+      S = R;
+    }
+    t *= a;
+    if (problema_optimizacion.evaluar(S[0], S[1]) <
+        problema_optimizacion.evaluar(best[0], best[1])) {
+      best = S;
+    }
+
+    auto iter_end = std::chrono::high_resolution_clock::now();
+    auto duracion_us = std::chrono::duration_cast<std::chrono::microseconds>(
+        iter_end - iter_start);
+    double tiempo_ms = static_cast<double>(duracion_us.count()) / 1000.0;
+    meta::PuntoHistorial punto_i = {
+        tiempo_ms, iter, problema_optimizacion.evaluar(best[0], best[1]),
+        best[0], best[1]};
+    Historial.push_back(punto_i);
+
+    iter++;
+  }
+
+  meta::Resultado res;
+  res.Historial = Historial;
+  return res;
+}
+
+algo::AlgoritmoOptimizacion algoritmoSimulatedAnnealing = {
+    "Algoritmo Simulated Annealing",
+    {"radio", "max_iter", "tasa_reduccion", "alpha", "radio"},
+    algo::SS_Simulated_Annealing};
+
 // std::vector<std::function<meta::Resultado(prob::Optimization_Problem,
 //                                           algo::AlgContext)>>
 //     algo::lista_algoritmos = {algo::PM_Genetic_Algorithm,
 //                               algo::SS_HillClimbing};
 std::vector<algo::AlgoritmoOptimizacion> algo::lista_algoritmos = {
-    algoritmoGenetico, algoritmoHillClimbing};
+    algoritmoGenetico, algoritmoHillClimbing, algoritmoSimulatedAnnealing};

@@ -13,6 +13,10 @@ struct AlgContext {
   double radio;
   double mutation_rate;
   int max_generations;
+  // SS_Simmulated_Annealing
+  double tasa_reduccion; // 0.8 recomendable para que la probabilidad inicial de
+                         // aceptar una solucion peor sea 80%
+  double alpha;          // tasa de reduccion de temperatura
 };
 
 // este es un comentario
@@ -36,8 +40,9 @@ SS_HillClimbing(const prob::Optimization_Problem problema_optimizacion,
 // SS_HillClimbing_Random_Restart(const prob::Optimization_Problem
 // problema_optimizacion);
 
-// meta::Resultado SS_Simmulated_Annealing(const prob::Optimization_Problem
-// problema_optimizacion,
+meta::Resultado
+SS_Simulated_Annealing(const prob::Optimization_Problem problema_optimizacion,
+                       AlgContext contexto);
 //  double T_inicial,
 //  double T_final,
 //  double alpha,
