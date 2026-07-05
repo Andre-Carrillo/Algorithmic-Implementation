@@ -6,6 +6,31 @@
 #include <string>
 
 int main(int argc, char *argv[]) {
+  if (std::strcmp(argv[1], "-s") == 0) {
+    std::ofstream archivo("image_funcion.csv");
+    if (!archivo.is_open()) {
+      std::cerr << "Error al abrir el archivo" << std::endl;
+    }
+    archivo << "x,y,f" << std::endl;
+    int problema_id = std::stoi(argv[2]);
+
+    for (double i = 0; i <= std::stoi(argv[3]); i++) {
+      double x = (prob::lista_problemas[problema_id].limit_x.min +
+                  i *
+                      (prob::lista_problemas[problema_id].limit_x.max -
+                       prob::lista_problemas[problema_id].limit_x.min) /
+                      std::stoi(argv[3]));
+      double y = (prob::lista_problemas[problema_id].limit_y.min +
+                  i *
+                      (prob::lista_problemas[problema_id].limit_y.max -
+                       prob::lista_problemas[problema_id].limit_y.min) /
+                      std::stoi(argv[3]));
+
+      archivo << x << "," << y << ","
+              << prob::lista_problemas[problema_id].evaluar(x, y) << std::endl;
+    }
+    return 0;
+  }
   if (strcmp(argv[1], "-l") == 0) {
     std::ofstream archivo("lista.json");
 
