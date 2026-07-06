@@ -52,8 +52,8 @@ prob::Optimization_Problem iniciarMatyas() {
 prob::Optimization_Problem iniciarRosenbrock() {
   prob::Optimization_Problem Rosenbrock;
   Rosenbrock.name = "Problema de Rosenbrock";
-  Rosenbrock.limit_x = {-10, 10};
-  Rosenbrock.limit_y = {-10, 10};
+  Rosenbrock.limit_x = {-2, 2};
+  Rosenbrock.limit_y = {-1, 3};
   Rosenbrock.funcion_costo = [](const std::vector<double> &v) {
     return (std::pow(10 * (v[1] - v[0] * v[0]), 2) + std::pow((1 - v[0]), 2));
   };
