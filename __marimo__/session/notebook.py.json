@@ -7,19 +7,19 @@
   "cells": [
     {
       "id": "Hbol",
-      "code_hash": "1d0db38904205bec4d6f6f6a1f6cec3e",
+      "code_hash": "db87d2708ec2d873ffe91ef2f09520cb",
       "outputs": [
         {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
+          "type": "error",
+          "ename": "syntax",
+          "evalue": "line 2\n    import \"build/Algorithms.cpython-314-x86_64-linux-gnu.so\" as alg\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nSyntaxError: invalid syntax\n",
+          "traceback": []
         }
       ],
       "console": []
     },
     {
-      "id": "MJUe",
+      "id": "fmNZ",
       "code_hash": null,
       "outputs": [],
       "console": []
