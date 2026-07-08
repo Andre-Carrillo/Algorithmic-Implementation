@@ -80,14 +80,15 @@ if st.session_state.selector_func is not None:
     )
 if st.session_state.imagen is not None:
     imagen = st.session_state.imagen
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(2)
 
     # ax.imshow(imagen.pivot(columns="x", index="y", values="f"))
-    ax.scatter(imagen.x, imagen.y, c=np.log(imagen.f))
+    ax[0].scatter(imagen.x, imagen.y, c=np.log(imagen.f))
 
     sim = pd.read_csv("resultados.csv", skiprows=1)
     # print(sim)
-    ax.plot(sim.best_position_x, sim.best_position_y, c="red")
+    ax[0].plot(sim.best_position_x, sim.best_position_y, c="red")
+    ax[1].plot(sim.tiempo, sim.best_score)
     st.pyplot(fig)
 
 
