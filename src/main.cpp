@@ -91,12 +91,14 @@ int main(int argc, char *argv[]) {
   // std::cout << "Cargando Problema" << std::endl;
   algo::AlgContext contexto;
   contexto.max_generations = 300;
-  contexto.max_iter = 1000000;
+  contexto.max_iter = 100000;
   contexto.mutation_rate = 0.05;
   contexto.pop_size = 300;
-  contexto.radio = 0.5;
+  contexto.radio = .6;
   contexto.tasa_reduccion = 0.8;
   contexto.alpha = 0.99;
+  contexto.n_tweaks_sample = 10;
+  contexto.max_list_tabu = 20;
   meta::Resultado resultado = algo::lista_algoritmos[algoritmo_id].algoritmo(
       prob::lista_problemas[problema_id], contexto);
   // std::cout << "Problema finalizado" << std::endl;

@@ -17,6 +17,9 @@ struct AlgContext {
   double tasa_reduccion; // 0.8 recomendable para que la probabilidad inicial de
                          // aceptar una solucion peor sea 80%
   double alpha;          // tasa de reduccion de temperatura
+  // Tabu SS_Tabu_Search_FB
+  int max_list_tabu;
+  int n_tweaks_sample;
 };
 
 // este es un comentario
@@ -48,8 +51,10 @@ SS_Simulated_Annealing(const prob::Optimization_Problem problema_optimizacion,
 //  double alpha,
 //  double limits[2][2]);
 
-// meta::Resultado SS_Tabu_Search(const prob::Optimization_Problem
-// problema_optimizacion); meta::Resultado SS_Tabu_Search_FB(const
+meta::Resultado
+SS_Tabu_Search(const prob::Optimization_Problem problema_optimizacion,
+               AlgContext contexto);
+// meta::Resultado SS_Tabu_Search_FB(const
 // prob::Optimization_Problem problema_optimizacion);//Feature Based
 // meta::Resultado SS_Iterated_Local_Search_Random_Restart(const
 // prob::Optimization_Problem problema_optimizacion); meta::Resultado

@@ -1,10 +1,12 @@
 #include "algoritmos.hpp"
 #include "funciones.hpp"
 #include "meta.hpp"
+#include <algorithm>
 #include <chrono>
 #include <cmath>
 #include <random>
 #include <vector>
+// #include <queue>
 
 static std::mt19937 motor(40);
 
@@ -251,12 +253,80 @@ meta::Resultado algo::SS_Simulated_Annealing(
 
 algo::AlgoritmoOptimizacion algoritmoSimulatedAnnealing = {
     "Algoritmo Simulated Annealing",
-    {"radio", "max_iter", "tasa_reduccion", "alpha", "radio"},
+    {"radio", "max_iter", "tasa_reduccion", "alpha"},
     algo::SS_Simulated_Annealing};
 
+meta::Resultado
+algo::SS_Tabu_Search(const prob::Optimization_Problem problema_optimizacion,
+                     AlgContext contexto) {
+
+  double radio = contexto.radio;
+
+  std::uniform_real_distribution<double> x_range(
+      problema_optimizacion.limit_x.min, problema_optimizacion.limit_x.max);
+  std::uniform_real_distribution<double> y_range(
+      problema_optimizacion.limit_y.min, problema_optimizacion.limit_y.max);
+  std::vector<double> S = {x_range(motor), y_range(motor)};
+  std::vector<double> best = S;
+  std::vector<std::vector<double>> L;
+  L.push_back(S);
+
+  std::vector<meta::PuntoHistorial> Historial{};
+
+  auto iter_start = std::chrono::high_resolution_clock::now();
+  for (int i = 0; i < contexto.max_iter; i++) {
+    if (L.size() > contexto.max_list_tabu) {
+      L.erase(L.begin());
+    }
+    std::uniform_real_distribution<double> x_range_sample(S[0] - radio,
+                                                          S[0] + radio);
+    std::uniform_real_distribution<double> y_range_sample(S[1] - radio,
+                                                          S[1] + radio);
+    std::vector<double> R = {x_range_sample(motor), y_range_sample(motor)};
+
+    for (int j = 0; j < contexto.n_tweaks_sample - 1; j++) {
+      std::uniform_real_distribution<double> x_range_sample(S[0] - radio,
+                                                            S[0] + radio);
+      std::uniform_real_distribution<double> y_range_sample(S[1] - radio,
+                                                            S[1] + radio);
+      std::vector<double> W = {x_range_sample(motor), y_range_sample(motor)};
+      if ((std::find(L.begin(), L.end(), W) == L.end()) &&
+          ((problema_optimizacion.evaluar(W[0], W[1]) <
+            problema_optimizacion.evaluar(R[0], R[1])) ||
+           (std::find(L.begin(), L.end(), R) == L.end()))) {
+        R = W;
+      }
+    }
+    if ((std::find(L.begin(), L.end(), R) == L.end())) {
+      S = R;
+      L.push_back(R);
+    }
+    if ((problema_optimizacion.evaluar(S[0], S[1]) <
+         problema_optimizacion.evaluar(best[0], best[1]))) {
+      best = S;
+    }
+    auto iter_end = std::chrono::high_resolution_clock::now();
+    auto duracion_us = std::chrono::duration_cast<std::chrono::microseconds>(
+        iter_end - iter_start);
+    double tiempo_ms = static_cast<double>(duracion_us.count()) / 1000.0;
+    meta::PuntoHistorial punto_i = {
+        tiempo_ms, i, problema_optimizacion.evaluar(best[0], best[1]), best[0],
+        best[1]};
+    Historial.push_back(punto_i);
+  }
+  meta::Resultado res;
+  res.Historial = Historial;
+  return res;
+}
+
+algo::AlgoritmoOptimizacion algoritmoTabuSearch = {
+    "Algoritmo Tabu Search",
+    {"radio", "max_iter", "max_list_tabu", "n_tweaks_sample"},
+    algo::SS_Tabu_Search};
 // std::vector<std::function<meta::Resultado(prob::Optimization_Problem,
 //                                           algo::AlgContext)>>
 //     algo::lista_algoritmos = {algo::PM_Genetic_Algorithm,
 //                               algo::SS_HillClimbing};
 std::vector<algo::AlgoritmoOptimizacion> algo::lista_algoritmos = {
-    algoritmoGenetico, algoritmoHillClimbing, algoritmoSimulatedAnnealing};
+    algoritmoGenetico, algoritmoHillClimbing, algoritmoSimulatedAnnealing,
+    algoritmoTabuSearch};
